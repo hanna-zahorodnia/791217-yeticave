@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Hanna Zahorodnia](https://up.htmlacademy.ru/php/7/user/791217).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Зубов](https://htmlacademy.ru/profile/serj).
 
 ---
 
