@@ -30,6 +30,7 @@ $user_avatar = 'img/user.jpg';
                 <a class="main-header__add-lot button" href="pages/add-lot.html">Добавить лот</a>
 
                 <nav class="user-menu">
+
                     <?php if ($is_auth == 1): ?>
                     <div class="user-menu__image">
                         <img src="img/user.jpg" width="40" height="40" alt="Пользователь">
@@ -39,9 +40,7 @@ $user_avatar = 'img/user.jpg';
                             <?=$user_name; ?>
                         </p>
                     </div>
-                    <?php endif; ?>
-
-                    <?php if ($is_auth !== 1): ?>
+                    <?php else: ?>
                     <ul class="user-menu__list">
                         <li class="user-menu__item">
                             <a href="#">Регистрация</a>
@@ -51,8 +50,8 @@ $user_avatar = 'img/user.jpg';
                         </li>
                     </ul>
                     <?php endif; ?>
-                </nav>
 
+                </nav>
             </div>
         </header>
 
