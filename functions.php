@@ -16,4 +16,10 @@ $result = ob_get_clean();
 return $result;
 }
 
+function showTimeLeft() {
+    $tomorrow_timestamp = strtotime('tomorrow midnight');
+    $time_left = $tomorrow_timestamp - time();
+    return date('H:i', $time_left);
+}
+
 ?>
