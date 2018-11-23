@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set("Europe/Moscow");
+
 function include_template($name, $data) {
 $name = 'templates/' . $name;
 $result = '';
@@ -14,6 +16,12 @@ require $name;
 $result = ob_get_clean();
 
 return $result;
+}
+
+function showTimeLeft() {
+    $tomorrow_timestamp = strtotime('tomorrow midnight');
+    $time_left = $tomorrow_timestamp - time();
+    return date('H:i', $time_left);
 }
 
 ?>
