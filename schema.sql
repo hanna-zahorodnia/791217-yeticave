@@ -31,12 +31,25 @@ CREATE TABLE `lots` (
   `start_price` int(10) unsigned NOT NULL,
   `end_date` datetime NOT NULL,
   `bid_step` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
+  `author` int(10) unsigned NOT NULL,
+  `winner` int(10) unsigned DEFAULT NULL,
+  `category` int(3) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`author`) REFERENCES `users` (`id`),
+  FOREIGN KEY (`winner`) REFERENCES `users` (`id`),
+  FOREIGN KEY (`category`) REFERENCES `categories` (`id`)
 );
 
 CREATE TABLE `bid` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `set_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `amount` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  `user` INT UNSIGNED NOT NULL,
+	`lot` INT UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`),
+	FOREIGN KEY (`user`) REFERENCES `users`(`id`),
+	FOREIGN KEY (`lot`) REFERENCES `lots`(`id`)
 );
+
+
