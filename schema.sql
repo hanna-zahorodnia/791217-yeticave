@@ -44,7 +44,6 @@ CREATE TABLE `bid` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `set_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `amount` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
   `user` INT UNSIGNED NOT NULL,
 	`lot` INT UNSIGNED NOT NULL,
 	PRIMARY KEY (`id`),
