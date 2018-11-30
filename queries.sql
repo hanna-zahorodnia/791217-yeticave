@@ -25,22 +25,22 @@ VALUES
 
 
 INSERT INTO `lots` (`title`, `photo_path`, `start_price`, `end_date`, `bid_step`, `author`, `category`)
-VALUES ('2014 Rossignol District Snowboard', 'img/lot-1.jpg', 10999, '2018-12-25 23:59:59', 300, 1, 8);
+VALUES ('2014 Rossignol District Snowboard', 'img/lot-1.jpg', 10999, '2018-12-25 23:59:59', 300, 1, 1);
 
 INSERT INTO `lots` (`title`, `photo_path`, `start_price`, `end_date`, `bid_step`, `author`, `category`)
-VALUES ('DC Ply Mens 2016/2017 Snowboard', 'img/lot-2.jpg', 159999, '2018-12-27 23:59:59', 500, 2, 8);
+VALUES ('DC Ply Mens 2016/2017 Snowboard', 'img/lot-2.jpg', 159999, '2018-12-27 23:59:59', 500, 2, 1);
 
 INSERT INTO `lots` (`title`, `photo_path`, `start_price`, `end_date`, `bid_step`, `author`, `category`)
-VALUES ('Крепления Union Contact Pro 2015 года размер L/XL', 'img/lot-3.jpg', 8000, '2018-12-28 23:59:59', 100, 3, 9);
+VALUES ('Крепления Union Contact Pro 2015 года размер L/XL', 'img/lot-3.jpg', 8000, '2018-12-28 23:59:59', 100, 3, 2);
 
 INSERT INTO `lots` (`title`, `photo_path`, `start_price`, `end_date`, `bid_step`, `author`, `category`)
-VALUES ('Ботинки для сноуборда DC Mutiny Charocal', 'img/lot-4.jpg', 10999, '2018-12-31 23:59:59', 350, 1, 10);
+VALUES ('Ботинки для сноуборда DC Mutiny Charocal', 'img/lot-4.jpg', 10999, '2018-12-31 23:59:59', 350, 1, 3);
 
 INSERT INTO `lots` (`title`, `photo_path`, `start_price`, `end_date`, `bid_step`, `author`, `category`)
-VALUES ('Куртка для сноуборда DC Mutiny Charocal', 'img/lot-5.jpg', 7500, '2018-12-30 23:59:59', 50, 2, 11);
+VALUES ('Куртка для сноуборда DC Mutiny Charocal', 'img/lot-5.jpg', 7500, '2018-12-30 23:59:59', 50, 2, 4);
 
 INSERT INTO `lots` (`title`, `photo_path`, `start_price`, `end_date`, `bid_step`, `author`, `category`)
-VALUES ('Маска Oakley Canopy', 'img/lot-6.jpg', 5400, '2018-12-29 23:59:59', 45, 3, 13);
+VALUES ('Маска Oakley Canopy', 'img/lot-6.jpg', 5400, '2018-12-29 23:59:59', 45, 3, 6);
 
 
 INSERT INTO `bid` (`amount`, `user`, `lot`)

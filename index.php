@@ -11,6 +11,16 @@ if (!$con) {
     $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
 } else {
 
+    $sql = 'SELECT `name` FROM `categories`';
+    $result = mysqli_query($con, $sql);
+
+    if ($result) {
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    else {
+        $error = mysqli_error($con);
+        $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
+    }
 
     $sql = 'SELECT DISTINCT `lots`.`title`, `start_price`, `photo_path`, MAX(IF(`amount` IS NULL, `start_price`, `amount`)) AS `price`, COUNT(`lot`) AS `bids_number`, `categories`.`name` FROM `lots`'
         . 'LEFT JOIN `bid` ON `lots`.`id` = `bid`.`lot` '
@@ -21,17 +31,6 @@ if (!$con) {
     if ($result = mysqli_query($con, $sql)) {
         $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
         $page_content = include_template('index.php', ['lots' => $lots]);
-    }
-    else {
-        $error = mysqli_error($con);
-        $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
-    }
-
-    $sql = 'SELECT `name` FROM `categories`';
-    $result = mysqli_query($con, $sql);
-
-    if ($result) {
-        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
     else {
         $error = mysqli_error($con);
