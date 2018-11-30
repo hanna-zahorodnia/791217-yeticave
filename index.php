@@ -1,55 +1,42 @@
 <?php
+require_once 'init.php';
+
 $is_auth = rand(0, 1);
 
 $user_name = 'Anna';
 $user_avatar = 'img/user.jpg';
 
-$categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
+if (!$con) {
+    $error = "Ошибка подключения: " . mysqli_connect_error();
+    $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
+} else {
 
-$lots = [
-    1 => [
-        'name' => '2014 Rossignol District Snowboard',
-        'category' => $categories[0],
-        'price' => 10999,
-        'img' => 'img/lot-1.jpg'
-    ],
+    $sql = 'SELECT `name` FROM `categories`';
+    $result = mysqli_query($con, $sql);
 
-    [
-        'name' => 'DC Ply Mens 2016/2017 Snowboard',
-        'category' => $categories[0],
-        'price' => 159999,
-        'img' => 'img/lot-2.jpg'
-    ],
+    if ($result) {
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    else {
+        $error = mysqli_error($con);
+        $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
+    }
 
-    [
-        'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-        'category' => $categories[1],
-        'price' => 8000,
-        'img' => 'img/lot-3.jpg'
-    ],
+    $sql = 'SELECT DISTINCT `lots`.`title`, `start_price`, `photo_path`, MAX(IF(`amount` IS NULL, `start_price`, `amount`)) AS `price`, COUNT(`lot`) AS `bids_number`, `categories`.`name` FROM `lots`'
+        . 'LEFT JOIN `bid` ON `lots`.`id` = `bid`.`lot` '
+        . 'INNER JOIN `categories` ON `lots`.`category` = `categories`.`id` '
+        . 'WHERE CURRENT_TIMESTAMP() < `end_date` '
+        . 'GROUP BY `lots`.`title`, `start_price`, `photo_path`, `category`; ';
 
-    [
-        'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
-        'category' => $categories[2],
-        'price' => 10999,
-        'img' => 'img/lot-4.jpg'
-    ],
-
-    [
-        'name' => 'Куртка для сноуборда DC Mutiny Charocal',
-        'category' => $categories[3],
-        'price' => 7500,
-        'img' => 'img/lot-5.jpg'
-    ],
-
-    [
-        'name' => 'Маска Oakley Canopy',
-        'category' => $categories[5],
-        'price' => 5400,
-        'img' => 'img/lot-6.jpg'
-    ]
-
-];
+    if ($result = mysqli_query($con, $sql)) {
+        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $page_content = include_template('index.php', ['lots' => $lots]);
+    }
+    else {
+        $error = mysqli_error($con);
+        $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
+    }
+}
 
 function formatPrice($price) {
     $price = ceil($price);
@@ -59,7 +46,6 @@ function formatPrice($price) {
     return $price . ' ₽';
 }
 
-require('functions.php');
 $page_content = include_template('index.php', ['lots' => $lots, 'categories' => $categories]);
 
 $layout_content = include_template('layout.php', ['title' => 'Yeticave - Главная', 'is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories]);
