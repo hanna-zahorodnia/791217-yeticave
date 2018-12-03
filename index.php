@@ -22,11 +22,11 @@ if (!$con) {
         $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
     }
 
-    $sql = 'SELECT DISTINCT `lots`.`title`, `start_price`, `photo_path`, MAX(IF(`amount` IS NULL, `start_price`, `amount`)) AS `price`, COUNT(`lot`) AS `bids_number`, `categories`.`name` FROM `lots`'
+    $sql = 'SELECT DISTINCT `lots`.`id`, `lots`.`title`, `start_price`, `photo_path`, MAX(IF(`amount` IS NULL, `start_price`, `amount`)) AS `price`, COUNT(`lot`) AS `bids_number`, `categories`.`name` FROM `lots`'
         . 'LEFT JOIN `bid` ON `lots`.`id` = `bid`.`lot` '
         . 'INNER JOIN `categories` ON `lots`.`category` = `categories`.`id` '
         . 'WHERE CURRENT_TIMESTAMP() < `end_date` '
-        . 'GROUP BY `lots`.`title`, `start_price`, `photo_path`, `category`; ';
+        . 'GROUP BY `lots`.`id`, `lots`.`title`, `start_price`, `photo_path`, `category`; ';
 
     if ($result = mysqli_query($con, $sql)) {
         $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
