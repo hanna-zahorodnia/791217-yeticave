@@ -1,10 +1,14 @@
 <?php
 require_once 'init.php';
+require_once 'functions.php';
 
 $is_auth = rand(0, 1);
 
 $user_name = 'Anna';
 $user_avatar = 'img/user.jpg';
+
+$con = mysqli_connect($config['db_host'], $config['db_user'], $config['db_password'], $config['db_name']);
+mysqli_set_charset($con, "utf8");
 
 if (!$con) {
     $error = "Ошибка подключения: " . mysqli_connect_error();

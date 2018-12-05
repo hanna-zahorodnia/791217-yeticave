@@ -1,5 +1,6 @@
 <?php
 require_once 'init.php';
+require_once 'functions.php';
 
 $is_auth = rand(0, 1);
 
@@ -7,43 +8,23 @@ $user_name = 'Anna';
 $user_avatar = 'img/user.jpg';
 
 if (!isset($_GET['id'])) {
-    header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
+    header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
 
-    $page_content = "<p>К сожалению, данный лот не существует или был удален</p>";
+    $page_content = '<p>К сожалению, данный лот не существует или был удален</p>';
 } else {
-    $lot_id = $_GET['id'];
 
-    if (!$con) {
-        $error = "Ошибка подключения: " . mysqli_connect_error();
-        $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
-    } else {
+    $con = mysqli_connect($config['db_host'], $config['db_user'], $config['db_password'], $config['db_name']);
+    mysqli_set_charset($con, "utf8");
 
-        $sql = 'SELECT `lots`.`id`, `lots`.`title`, `lots`.`description`, `lots`.`photo_path`, `lots`.`end_date`, `lots`.`start_price`, `lots`.`bid_step`, `lots`.`author`, `lots`.`winner`, `categories`.`name` FROM `lots`'
-            . 'INNER JOIN `categories` ON `lots`.`category` = `categories`.`id` '
-            . 'WHERE `lots`.`id` = ' . $lot_id . ' '
-            . 'GROUP BY `lots`.`id`; ';
-
-        $result = mysqli_query($con, $sql);
-
-        if (!$result) {
-            $error = mysqli_error($con);
-            $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
-        } else {
-            $lot = mysqli_fetch_assoc($result);
-            $page_content = include_template('lot-index.php', ['lot' => $lot]);
-        }
+    if ($con) {
+        $sql_lot_by_id = showLotById($_GET['id']);
+        $current_lot = getData($con, $sql_lot_by_id);
     }
 }
 
-function formatPrice($price) {
-    $price = ceil($price);
-    if ($price >= 1000) {
-        $price = number_format($price, 0, '', ' ');
-    }
-    return $price . ' ₽';
-}
+$page_content = include_template('lot-index.php', $current_lot[0]);
 
-$layout_content = include_template('lot-layout.php', ['is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories]);
+$layout_content = include_template('lot-layout.php', ['is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content]);
 
 print($layout_content);
 
