@@ -7,9 +7,6 @@ $is_auth = rand(0, 1);
 $user_name = 'Anna';
 $user_avatar = 'img/user.jpg';
 
-$con = mysqli_connect($config['db_host'], $config['db_user'], $config['db_password'], $config['db_name']);
-mysqli_set_charset($con, "utf8");
-
 if (!$con) {
     $error = "Ошибка подключения: " . mysqli_connect_error();
     $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
@@ -40,14 +37,6 @@ if (!$con) {
         $error = mysqli_error($con);
         $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
     }
-}
-
-function formatPrice($price) {
-    $price = ceil($price);
-    if ($price >= 1000) {
-        $price = number_format($price, 0, '', ' ');
-    }
-    return $price . ' ₽';
 }
 
 $page_content = include_template('index.php', ['lots' => $lots, 'categories' => $categories]);
