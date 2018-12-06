@@ -1,15 +1,13 @@
 <?php
-require_once 'functions.php';
 
-$db_host = "localhost";
-$db_user = "root";
-$db_password = "Hanna29121993";
-$db_name = "yeticave";
+$config = [
+    'db_host' => 'localhost',
+    'db_user' => 'root',
+    'db_password' => 'Hanna29121993',
+    'db_name' => 'yeticave',
+];
 
-$con = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+$con = mysqli_connect($config['db_host'], $config['db_user'], $config['db_password'], $config['db_name']);
 mysqli_set_charset($con, "utf8");
-
-$categories = [];
-$page_content = '';
 
 ?>
