@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set("Europe/Moscow");
 
-function include_template($path, $data) {
+function include_template($path, $data, $errors = [], $values = []) {
     $path = 'templates/' . $path;
     $result = '';
     if (!file_exists($path)) {
@@ -9,6 +9,8 @@ function include_template($path, $data) {
     }
     ob_start();
     extract($data);
+    extract($errors);
+    extract($values);
     require $path;
     $result = ob_get_clean();
     return $result;
@@ -44,6 +46,19 @@ function showLotById($lot_id) {
     INNER JOIN `categories` ON `lots`.`category` = `categories`.`id`
     WHERE `lots`.`id` = ' . $lot_id . ' 
     GROUP BY `lots`.`id`; ';
+}
+
+function publishLot() {
+    return '
+    INSERT INTO lots (add_date, title, description, photo_path, start_price, end_date, bid_step, author, winner, category)
+    VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, 1, NULL);
+    ';
+}
+
+function showCategories() {
+    return '
+    SELECT * FROM categories;
+    ';
 }
 
 ?>
