@@ -9,6 +9,7 @@ function include_template($path, $data) {
     }
     ob_start();
     extract($data);
+    //extract($values);
     require $path;
     $result = ob_get_clean();
     return $result;
@@ -44,6 +45,27 @@ function showLotById($lot_id) {
     INNER JOIN `categories` ON `lots`.`category` = `categories`.`id`
     WHERE `lots`.`id` = ' . $lot_id . ' 
     GROUP BY `lots`.`id`; ';
+}
+
+function publishLot() {
+    return '
+    INSERT INTO lots (add_date, title, description, photo_path, start_price, end_date, bid_step, author, winner, category)
+    VALUES (NOW(), ?, ?, ?, ?, ?, ?, 1, NULL, ?);
+    ';
+}
+
+function showCategories() {
+    return '
+    SELECT * FROM categories;
+    ';
+}
+
+function getAvailableLot($number, $con) {
+    $result = mysqli_query($con,"SELECT id FROM lots WHERE id='$number'");
+    if ($num_rows = mysqli_num_rows($result) > 0) {
+        return true;
+    }
+    return false;
 }
 
 ?>
