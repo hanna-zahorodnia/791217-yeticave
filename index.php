@@ -2,10 +2,7 @@
 require_once 'init.php';
 require_once 'functions.php';
 
-$is_auth = rand(0, 1);
-
-$user_name = 'Anna';
-$user_avatar = 'img/user.jpg';
+session_start();
 
 if (!$con) {
     $error = "Ошибка подключения: " . mysqli_connect_error();
@@ -41,7 +38,11 @@ if (!$con) {
 
 $page_content = include_template('index.php', ['lots' => $lots, 'categories' => $categories]);
 
-$layout_content = include_template('layout.php', ['title' => 'Yeticave - Главная', 'is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories]);
+if ($_SESSION) {
+    $layout_content = include_template('layout.php', ['title' => 'Yeticave - Главная', 'user_name' => $_SESSION['user']['name'], 'user_avatar' => $_SESSION['user']['photo_path'], 'content' => $page_content, 'categories' => $categories]);
+} else {
+    $layout_content = include_template('layout.php', ['title' => 'Yeticave - Главная', 'user_name' => '', 'user_avatar' => '', 'content' => $page_content, 'categories' => $categories]);
+}
 
 print($layout_content);
 

@@ -2,10 +2,15 @@
 require_once 'init.php';
 require_once 'functions.php';
 
-$is_auth = rand(0, 1);
+session_start();
 
-$user_name = 'Anna';
-$user_avatar = 'img/user.jpg';
+if (empty($_SESSION)) {
+    $user_name = '';
+    $user_avatar = '';
+} else {
+    $user_name = $_SESSION['user']['name'];
+    $user_avatar = $_SESSION['user']['photo_path'] ? $_SESSION['user']['photo_path'] : "";
+}
 
 
 if (!isset($_GET['id']) || !getAvailableLot($_GET['id'], $con)) {
@@ -15,8 +20,7 @@ if (!isset($_GET['id']) || !getAvailableLot($_GET['id'], $con)) {
     $sql_lot_by_id = showLotById($_GET['id']);
     $current_lot = getData($con, $sql_lot_by_id);
     $page_content = include_template('lot-index.php', $current_lot[0]);
-    $layout_content = include_template('lot-layout.php', ['is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content]);
-
+    $layout_content = include_template('lot-layout.php', ['user_name' => $user_name, 'user_avatar' => $user_avatar, 'content' => $page_content, 'title' => $current_lot[0]['title']]);
     print($layout_content);
 }
 

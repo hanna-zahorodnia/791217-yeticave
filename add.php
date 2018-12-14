@@ -3,10 +3,15 @@ require_once 'init.php';
 require_once 'functions.php';
 require_once 'mysql_helper.php';
 
-$is_auth = rand(0, 1);
+session_start();
 
-$user_name = 'Anna';
-$user_avatar = 'img/user.jpg';
+if (empty($_SESSION)) {
+    http_response_code(403);
+    exit();
+} else {
+    $user_name = $_SESSION['user']['name'];
+    $user_avatar = $_SESSION['user']['photo_path'] ? $_SESSION['user']['photo_path'] : "";
+}
 
 $errors = [];
 
@@ -71,14 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         $page_content = include_template('add-lot.php', ['categories' => $categories, 'errors' => $errors, 'lot' => $lot]);
-        $layout_content = include_template('lot-layout.php', ['is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories]);
+        $layout_content = include_template('lot-layout.php', ['user_name' => $user_name, 'content' => $page_content, 'categories' => $categories, 'title' => 'Добавление лота']);
 
         print($layout_content);
     }
 }
 
 $page_content = include_template('add-lot.php', ['categories' => $categories, 'errors' => $errors]);
-$layout_content = include_template('lot-layout.php', ['is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories]);
+$layout_content = include_template('lot-layout.php', ['user_name' => $_SESSION['user']['name'], 'user_avatar' => $_SESSION['user']['photo_path'], 'content' => $page_content, 'categories' => $categories, 'title' => 'Добавление лота']);
 
 print($layout_content);
 

@@ -3,11 +3,6 @@ require_once 'init.php';
 require_once 'functions.php';
 require_once 'mysql_helper.php';
 
-$is_auth = rand(0, 1);
-
-$user_name = 'Anna';
-$user_avatar = 'img/user.jpg';
-
 $tpl_data = [];
 
 $sql_category = 'SELECT * FROM categories;';
@@ -67,33 +62,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 $sql = 'INSERT INTO users (register_date, email, name, password, photo_path, contacts)'
                     . 'VALUES (NOW(), ?, ?, ?, NULL, ?); ';
-                $stmt = db_get_prepare_stmt($con, $sql, [$form['email'], $form['name'], $password, 'img/' . $form['photo_path'], $form['message']]);
+                $stmt = db_get_prepare_stmt($con, $sql, [$form['email'], $form['name'], $password, $form['message']]);
                 $res = mysqli_stmt_execute($stmt);
             }
         }
 
         if ($res && empty($errors)) {
-            header("Location: /login.php");
+            header("Location: login.php");
             exit();
         }
 
         $tpl_data['errors'] = $errors;
         $tpl_data['values'] = $form;
         $page_content = include_template('sign-up.php', $tpl_data);
-
-        $layout_content = include_template('layout.php', ['is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => [], 'title' => 'Yeticave | Регистрация']);
-        print($layout_content);
-
     }
 
     $tpl_data['errors'] = $errors;
     $tpl_data['values'] = $form;
 }
 
-
 $page_content = include_template('sign-up.php', $tpl_data);
 
-$layout_content = include_template('lot-layout.php', ['is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories, 'title' => 'Yeticave | Регистрация']);
+$layout_content = include_template('lot-layout.php', ['user_name' => "", 'user_avatar' => "", 'content' => $page_content, 'categories' => $categories, 'title' => 'Yeticave | Регистрация']);
 print($layout_content);
 ?>
-
