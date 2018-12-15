@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 else {
-    if (isset($_SESSION['user'])) {
+    if (isset($_SESSION['user']['name'])) {
         header("Location: index.php");
     }
     else {
