@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set("Europe/Moscow");
+date_default_timezone_set("Europe/Warsaw");
 
 function include_template($path, $data) {
     $path = 'templates/' . $path;
@@ -9,7 +9,6 @@ function include_template($path, $data) {
     }
     ob_start();
     extract($data);
-    //extract($values);
     require $path;
     $result = ob_get_clean();
     return $result;
@@ -23,11 +22,16 @@ function formatPrice($price) {
     return $price . ' ₽';
 }
 
-function showTimeLeft() {
-    $tomorrow_timestamp = strtotime('tomorrow midnight');
-    $time_left = $tomorrow_timestamp - time();
-    return date('H:i', $time_left);
+function showTimeLeft($end_date) {
+    if (strtotime($end_date) > strtotime('now')) {
+        $time_left = strtotime($end_date) - strtotime('now');
+        $hours = floor($time_left / 3600);
+        $minutes = floor(($time_left % 3600) / 60);
+        return $hours . ':' . $minutes;
+    }
+    return '00:00';
 }
+
 
 function getData($connect, $sql) {
     $result = mysqli_query($connect, $sql);
@@ -47,16 +51,29 @@ function showLotById($lot_id) {
     GROUP BY `lots`.`id`; ';
 }
 
-function publishLot() {
+function showCategories() {
     return '
-    INSERT INTO lots (add_date, title, description, photo_path, start_price, end_date, bid_step, author, winner, category)
-    VALUES (NOW(), ?, ?, ?, ?, ?, ?, 1, NULL, ?);
+    SELECT * FROM `categories`;
     ';
 }
 
-function showCategories() {
+function showBidsNum($lot_id) {
     return '
-    SELECT * FROM categories;
+    SELECT COUNT(`bid`.`lot`) AS `bids_count` 
+    FROM `lots` 
+    LEFT JOIN `bid` ON `lots`.`id` = `bid`.`lot` 
+    WHERE `lots`.`id` = ' . $lot_id . '
+    ';
+}
+
+function showBidById($lot_id) {
+    return '
+    SELECT `users`.`name`, `bid`.`amount`, `bid`.`set_date`
+    FROM `bid`
+    INNER JOIN `lots` ON `lots`.`id` = `bid`.`lot`
+    LEFT JOIN `users` ON `users`.`id` = `bid`.`user`
+    WHERE `lots`.`id` = ' . $lot_id . '
+    ORDER BY `bid`.`set_date` DESC;
     ';
 }
 
@@ -66,6 +83,54 @@ function getAvailableLot($number, $con) {
         return true;
     }
     return false;
+}
+
+function showMaxBid($lot_id) {
+    return '
+        SELECT DISTINCT MAX(IF(`amount` IS NULL, `start_price`, `amount`)) AS `price`
+        FROM `lots`
+        LEFT JOIN `bid` ON `lots`.`id` = `bid`.`lot`
+        WHERE `lots`.`id` = ' . $lot_id .'
+        ';
+}
+
+function getBidUserId($lot_id, $id) {
+    return '
+        SELECT `bid`.`user`
+        FROM `bid`
+        WHERE `bid`.`lot` = ' . $lot_id . ' AND `bid`.`user` = ' . $id . '
+    ';
+}
+
+function dimension($time, $type) {
+    $dimension = [
+        'j' => array('дней', 'день', 'дня'),
+        'G' => array('часов', 'час', 'часа'),
+        'i' => array('минут', 'минуту', 'минуты'),
+    ];
+    if ($time >= 5 && $time <= 20)
+        $n = 0;
+    else if ($time == 1 || $time % 10 == 1)
+        $n = 1;
+    else if (($time <= 4 && $time >= 1) || ($time % 10 <= 4 && $time % 10 >= 1))
+        $n = 2;
+    else
+        $n = 0;
+    return $time.' '.$dimension[$type][$n]. ' назад';
+
+}
+
+function showDate($time) {
+    $newtime = time() - strtotime($time);
+    if ($newtime < 60) {
+        return 'меньше минуты назад';
+    } elseif ($newtime < 3600) {
+        return dimension((int)($newtime/60), 'i');
+    } elseif ($newtime < 86400) {
+        return dimension((int)($newtime/3600), 'G');
+    } elseif ($newtime < 2592000) {
+        return dimension((int)($newtime/86400), 'j');
+    }
 }
 
 ?>

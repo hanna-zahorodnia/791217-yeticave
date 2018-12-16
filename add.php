@@ -37,6 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
+    $lot_date = strtotime($lot['lot-date']);
+
+    if (!($lot_date > time() + strtotime('+1 day'))) {
+        $errors['lot-date'] = 'Введите дату в будущем';
+    }
+
     foreach ($required_number as $number) {
         if (!(is_numeric($_POST[$number]) && $_POST[$number] > 0)) {
             $errors[$number] = 'Заполните, пожалуйста, поле';
@@ -66,8 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($errors)) {
         $sql = 'INSERT INTO lots (add_date, title, description, photo_path, start_price, end_date, bid_step, author, winner, category)'
-            . 'VALUES (NOW(), ?, ?, ?, ?, ?, ?, 1, NULL, ?); ';
-        $stmt = db_get_prepare_stmt($con, $sql, [$lot['lot-name'], $lot['message'], 'img/' . $lot['photo_path'], $lot['lot-rate'], $lot['lot-date'], $lot['lot-step'], $lot['category']]);
+            . 'VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, NULL, ?); ';
+        $stmt = db_get_prepare_stmt($con, $sql, [$lot['lot-name'], $lot['message'], 'img/' . $lot['photo_path'], $lot['lot-rate'], $lot['lot-date'], $lot['lot-step'], $_SESSION['user']['id'], $lot['category']]);
         $res = mysqli_stmt_execute($stmt);
 
         if ($res) {

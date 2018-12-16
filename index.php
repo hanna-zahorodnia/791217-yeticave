@@ -20,7 +20,7 @@ if (!$con) {
         $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
     }
 
-    $sql = 'SELECT DISTINCT `lots`.`id`, `lots`.`title`, `start_price`, `photo_path`, MAX(IF(`amount` IS NULL, `start_price`, `amount`)) AS `price`, COUNT(`lot`) AS `bids_number`, `categories`.`name` FROM `lots`'
+    $sql = 'SELECT DISTINCT `lots`.`id`, `lots`.`title`, `start_price`, `photo_path`, MAX(IF(`amount` IS NULL, `start_price`, `amount`)) AS `price`, COUNT(`lot`) AS `bids_number`, `categories`.`name`, `lots`.`end_date` FROM `lots`'
         . 'LEFT JOIN `bid` ON `lots`.`id` = `bid`.`lot` '
         . 'INNER JOIN `categories` ON `lots`.`category` = `categories`.`id` '
         . 'WHERE CURRENT_TIMESTAMP() < `end_date` '
@@ -38,7 +38,7 @@ if (!$con) {
 
 $page_content = include_template('index.php', ['lots' => $lots, 'categories' => $categories]);
 
-if ($_SESSION) {
+if (!empty($_SESSION['user'])) {
     $layout_content = include_template('layout.php', ['title' => 'Yeticave - Главная', 'user_name' => $_SESSION['user']['name'], 'user_avatar' => $_SESSION['user']['photo_path'], 'content' => $page_content, 'categories' => $categories]);
 } else {
     $layout_content = include_template('layout.php', ['title' => 'Yeticave - Главная', 'user_name' => '', 'user_avatar' => '', 'content' => $page_content, 'categories' => $categories]);
