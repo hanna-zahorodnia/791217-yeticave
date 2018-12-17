@@ -1,18 +1,18 @@
 <section class="lot-item container">
-<h2><?= $lot['title']; ?></h2>
+<h2><?= strip_tags($lot['title']); ?></h2>
 <div class="lot-item__content">
     <div class="lot-item__left">
         <div class="lot-item__image">
             <img src="<?= $lot['photo_path']; ?>" width="730" height="548" alt="Сноуборд">
         </div>
         <p class="lot-item__category">Категория: <span><?= $lot['name']; ?></span></p>
-        <p class="lot-item__description"><?= $lot['description']; ?></p>
+        <p class="lot-item__description"><?=strip_tags($lot['description']); ?></p>
     </div>
     <div class="lot-item__right">
         <?php if(!empty($_SESSION['user']['name'])): ?>
             <div class="lot-item__state">
                 <div class="lot-item__timer timer">
-                    <?=showTimeLeft($lot['end_date']); ?>
+                    <?=strip_tags(showTimeLeft($lot['end_date'])); ?>
                 </div>
                 <div class="lot-item__cost-state">
                     <div class="lot-item__rate">
@@ -20,7 +20,7 @@
                         <span class="lot-item__cost"><?=htmlspecialchars(formatPrice($lot['price']));?></span>
                     </div>
                     <div class="lot-item__min-cost">
-                        Мин. ставка <span><?= $lot['bid_step']; ?></span>
+                        Мин. ставка <span><?= strip_tags($lot['bid_step']); ?></span>
                     </div>
                 </div>
                 <?php if(!$author_id && !$_SESSION['user']['bid'] && (strtotime($_SESSION['current_lot']['end_date']) > strtotime('now'))): ?>
@@ -41,9 +41,9 @@
             <table class="history__list">
                 <?php foreach ($bid as $val): ?>
                 <tr class="history__item">
-                    <td class="history__name"><?=$val['name']; ?></td>
-                    <td class="history__price"><?=formatPrice($val['amount']); ?></td>
-                    <td class="history__time"><?=showDate($val['set_date']); ?></td>
+                    <td class="history__name"><?=strip_tags($val['name']); ?></td>
+                    <td class="history__price"><?=strip_tags(formatPrice($val['amount'])); ?></td>
+                    <td class="history__time"><?=strip_tags(showDate($val['set_date'])); ?></td>
                 </tr>
                 <?php endforeach; ?>
             </table>

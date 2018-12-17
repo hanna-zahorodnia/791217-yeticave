@@ -51,12 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Введите корректный адрес почты';
-    } else {
-        $errors['email'] = 'Такой пользователь не найден';
-    }
-
     if (count($errors)) {
         $page_content = include_template('login.php', ['form' => $form, 'errors' => $errors]);
     }
