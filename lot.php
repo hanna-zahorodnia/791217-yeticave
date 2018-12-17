@@ -3,8 +3,6 @@ require_once 'init.php';
 require_once 'functions.php';
 require_once 'mysql_helper.php';
 
-date_default_timezone_set("Europe/Warsaw");
-
 session_start();
 
 if (empty($_SESSION['user'])) {
@@ -43,7 +41,7 @@ if (!isset($_GET['id']) || !getAvailableLot($_GET['id'], $con)) {
     $sql_bid_by_id = showBidById($_GET['id']);
     $current_bid = getData($con, $sql_bid_by_id);
 
-    if ($_SESSION['user']['id'] === $_SESSION['current_lot']['author']) {
+    if (isset($_SESSION['user']['id']) && $_SESSION['user']['id'] === $_SESSION['current_lot']['author']) {
         $author_id = true;
     } else {
         $author_id = false;
@@ -55,5 +53,4 @@ if (!isset($_GET['id']) || !getAvailableLot($_GET['id'], $con)) {
 
     print($layout_content);
 }
-
 ?>

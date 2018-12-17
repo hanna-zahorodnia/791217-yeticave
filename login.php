@@ -24,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($required as $field) {
         if (empty($form[$field])) {
             $errors[$field] = 'Заполните, пожалуйста, поле';
+        } else {
+            $form['email'] = $form['email'];
         }
     }
 
@@ -34,18 +36,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
+    if (!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Введите корректный адрес почты';
+    }
+
     if (!count($errors) and $user) {
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
             header("Location: index.php");
             exit();
-        }
-        else {
+        } else {
             $errors['password'] = 'Неверный пароль';
             $page_content = include_template('login.php', ['form' => $form, 'errors' => $errors]);
         }
     }
-    else {
+
+    if (!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Введите корректный адрес почты';
+    } else {
         $errors['email'] = 'Такой пользователь не найден';
     }
 

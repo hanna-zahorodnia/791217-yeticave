@@ -5,7 +5,7 @@ require_once 'mysql_helper.php';
 
 session_start();
 
-if (empty($_SESSION)) {
+if (empty($_SESSION['user'])) {
     http_response_code(403);
     exit();
 } else {
@@ -32,14 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required_number = ['lot-rate', 'lot-step'];
 
     foreach ($required as $field) {
-        if (empty($_POST[$field])) {
+        if (empty($lot[$field])) {
             $errors[$field] = 'Заполните, пожалуйста, поле';
+        } else {
+            $lot[$field] = $lot[$field];
         }
     }
 
     $lot_date = strtotime($lot['lot-date']);
+    $one_day = 86400;
 
-    if (!($lot_date > time() + strtotime('+1 day'))) {
+    if ($lot_date < time() + $one_day) {
         $errors['lot-date'] = 'Введите дату в будущем';
     }
 
@@ -88,10 +91,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$page_content = include_template('add-lot.php', ['categories' => $categories, 'errors' => $errors]);
-$layout_content = include_template('lot-layout.php', ['user_name' => $_SESSION['user']['name'], 'user_avatar' => $_SESSION['user']['photo_path'], 'content' => $page_content, 'categories' => $categories, 'title' => 'Добавление лота']);
+if (isset($lot)) {
+    $page_content = include_template('add-lot.php', ['categories' => $categories, 'errors' => $errors, 'lot' => $lot]);
+    $layout_content = include_template('lot-layout.php', ['user_name' => $_SESSION['user']['name'], 'user_avatar' => $_SESSION['user']['photo_path'], 'content' => $page_content, 'categories' => $categories, 'title' => 'Добавление лота']);
+} else {
+    $page_content = include_template('add-lot.php', ['categories' => $categories, 'errors' => $errors]);
+    $layout_content = include_template('lot-layout.php', ['user_name' => $_SESSION['user']['name'], 'user_avatar' => $_SESSION['user']['photo_path'], 'content' => $page_content, 'categories' => $categories, 'title' => 'Добавление лота']);
+}
 
 print($layout_content);
-
-
 ?>

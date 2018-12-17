@@ -5,7 +5,7 @@
     ?>
     <div class="form__item<?= $class_name; ?>">
         <label for="email">E-mail*</label>
-        <input id="email" type="text" name="signup[email]" placeholder="Введите e-mail" value="<?=$values['email'] ?? ''; ?>">
+        <input id="email" type="text" name="signup[email]" placeholder="Введите e-mail" value="<?=strip_tags($values['email'] ?? ''); ?>">
         <span class="form__error"><?=$errors['email']; ?></span>
     </div>
     <?php $class_name = isset($errors['password']) ? " form__item--invalid" : "";
@@ -19,14 +19,14 @@
     ?>
     <div class="form__item<?= $class_name; ?>">
         <label for="name">Имя*</label>
-        <input id="name" type="text" name="signup[name]" placeholder="Введите имя" value="<?=$values['name'] ?? ''; ?>">
+        <input id="name" type="text" name="signup[name]" placeholder="Введите имя" value="<?=strip_tags($values['name'] ?? ''); ?>">
         <span class="form__error"><?=$errors['name']; ?></span>
     </div>
     <?php $class_name = isset($errors['message']) ? " form__item--invalid" : "";
     ?>
     <div class="form__item<?= $class_name; ?>">
         <label for="message">Контактные данные*</label>
-        <textarea id="message" name="signup[message]" placeholder="Напишите как с вами связаться" value="<?=$values['message'] ?? ''; ?>"></textarea>
+        <textarea id="message" name="signup[message]" placeholder="Напишите как с вами связаться"><?=strip_tags($values['message'] ?? ''); ?></textarea>
         <span class="form__error"><?=$errors['message']; ?></span>
     </div>
     <?php $class_name = isset($errors['avatar']) ? " form__item--invalid" : "";

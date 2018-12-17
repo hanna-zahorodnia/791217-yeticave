@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set("Europe/Warsaw");
+date_default_timezone_set("Europe/Moscow");
 
 function include_template($path, $data) {
     $path = 'templates/' . $path;
@@ -104,18 +104,19 @@ function getBidUserId($lot_id, $id) {
 
 function dimension($time, $type) {
     $dimension = [
-        'j' => array('дней', 'день', 'дня'),
-        'G' => array('часов', 'час', 'часа'),
-        'i' => array('минут', 'минуту', 'минуты'),
+        'j' => ['дней', 'день', 'дня'],
+        'G' => ['часов', 'час', 'часа'],
+        'i' => ['минут', 'минуту', 'минуты'],
     ];
-    if ($time >= 5 && $time <= 20)
+    if ($time >= 5 && $time <= 20) {
         $n = 0;
-    else if ($time == 1 || $time % 10 == 1)
+    } else if ($time == 1 || $time % 10 == 1) {
         $n = 1;
-    else if (($time <= 4 && $time >= 1) || ($time % 10 <= 4 && $time % 10 >= 1))
+    } else if (($time <= 4 && $time >= 1) || ($time % 10 <= 4 && $time % 10 >= 1)) {
         $n = 2;
-    else
+    } else {
         $n = 0;
+    }
     return $time.' '.$dimension[$type][$n]. ' назад';
 
 }

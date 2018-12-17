@@ -24,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($required as $field) {
         if (empty($form[$field])) {
             $errors[$field] = 'Заполните, пожалуйста, поле ' . $field;
+        } else {
+            $form[$field] = $form[$field];
         }
     }
 
@@ -67,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
+
         if ($res && empty($errors)) {
             header("Location: login.php");
             exit();
@@ -75,6 +78,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $tpl_data['errors'] = $errors;
         $tpl_data['values'] = $form;
         $page_content = include_template('sign-up.php', $tpl_data);
+    } elseif(!$form['email']) {
+        $errors['email'] = 'Заполните, пожалуйста, поле email';
+    } elseif(!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Введите корректный адрес почты';
     }
 
     $tpl_data['errors'] = $errors;
