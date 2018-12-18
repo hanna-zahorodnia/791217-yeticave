@@ -7,6 +7,9 @@ session_start();
 if (!$con) {
     $error = "Ошибка подключения: " . mysqli_connect_error();
     $page_content = "<p>Ошибка MySQL: " . $error. "</p>";
+    $layout_content = include_template("layout.php", ['content' => $page_content]);
+    print($layout_content);
+    exit();
 } else {
 
     $sql = 'SELECT `name` FROM `categories`';

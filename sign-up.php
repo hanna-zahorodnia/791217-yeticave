@@ -13,6 +13,7 @@ if (!$con) {
     $page_content = "<p>Ошибка подключения: " . $error . "</p>";
     $layout_content = include_template("lot-layout.php", ['content' => $page_content]);
     print($layout_content);
+    exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -41,13 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
 
             if  ($_FILES['avatar']['error'] == 0) {
-                $tmp_name = $_FILES['avatar']['tmp_name'];
-                $path = $_FILES['avatar']['name'];
+                $tmp_name = htmlspecialchars($_FILES['avatar']['tmp_name']);
+                $path = htmlspecialchars($_FILES['avatar']['name']);
 
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $file_type = finfo_file($finfo, $tmp_name);
-
-
+                $file_type = mime_content_type($tmp_name);
+                
                 if (!($file_type == "image/jpeg" || $file_type == "image/png")) {
                     $errors['avatar'] = "Не удалось загрузить изображение. Убедитесь, что формат соответсвует jpg/jpeg или png";
                 } else {

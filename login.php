@@ -13,6 +13,7 @@ if (!$con) {
     $page_content = "<p>Ошибка подключения: " . $error . "</p>";
     $layout_content = include_template("lot-layout.php", ['title' => 'Yeticave', 'categories' => $categories, 'content' => $page_content]);
     print($layout_content);
+    exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

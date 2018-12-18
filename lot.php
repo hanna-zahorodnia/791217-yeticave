@@ -18,14 +18,14 @@ if (!isset($_GET['id']) || !getAvailableLot($_GET['id'], $con)) {
     header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
 
 } else if ($con) {
-    $sql_lot_by_id = showLotById($_GET['id']);
+    $sql_lot_by_id = showLotById(intval($_GET['id']));
     $current_lot = getData($con, $sql_lot_by_id);
-    $current_lot_price = getData($con, showMaxBid($_GET['id']));
+    $current_lot_price = getData($con, showMaxBid(intval($_GET['id'])));
     $current_lot[0]['price'] = $current_lot_price[0]['price'];
 
 
     if (!empty($_SESSION['user']['name'])) {
-        $sql = getBidUserId($_GET['id'], $_SESSION['user']['id']);
+        $sql = getBidUserId(intval($_GET['id']), $_SESSION['user']['id']);
         $result = mysqli_query($con, $sql);
         $usersIDs = mysqli_fetch_row($result);
         if ($usersIDs) {
@@ -35,10 +35,10 @@ if (!isset($_GET['id']) || !getAvailableLot($_GET['id'], $con)) {
         }
     }
 
-    $sql_bids_num = showBidsNum($_GET['id']);
+    $sql_bids_num = showBidsNum(intval($_GET['id']));
     $bids_num = getData($con, $sql_bids_num);
 
-    $sql_bid_by_id = showBidById($_GET['id']);
+    $sql_bid_by_id = showBidById(intval($_GET['id']));
     $current_bid = getData($con, $sql_bid_by_id);
 
     if (isset($_SESSION['user']['id']) && $_SESSION['user']['id'] === $_SESSION['current_lot']['author']) {

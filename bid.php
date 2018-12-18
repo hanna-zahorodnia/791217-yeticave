@@ -8,6 +8,9 @@ session_start();
 if (!$con) {
     $error = mysqli_connect_error();
     $page_content = "<p>Ошибка подключения: " . $error . "</p>";
+    $layout_content = include_template("lot-layout.php", ['content' => $page_content]);
+    print($layout_content);
+    exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user']['id'])) {
