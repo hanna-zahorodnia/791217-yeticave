@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $path = htmlspecialchars($_FILES['avatar']['name']);
 
                 $file_type = mime_content_type($tmp_name);
-                
+
                 if (!($file_type == "image/jpeg" || $file_type == "image/png")) {
                     $errors['avatar'] = "Не удалось загрузить изображение. Убедитесь, что формат соответсвует jpg/jpeg или png";
                 } else {

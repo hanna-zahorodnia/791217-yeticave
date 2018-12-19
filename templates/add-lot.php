@@ -12,15 +12,21 @@
             <span class="form__error"><?=$errors['lot-name']; ?></span>
         </div>
         <?php $class_name = isset($errors['category']) ? " form__item--invalid" : "";
+        $option_none = isset($lot['category']) ? "" : " selected";
         $value = isset($lot['category']) ? $lot['category'] : ""; ?>
         <div class="form__item<?= $class_name; ?>">
             <label for="category">Категория</label>
             <select id="category" name="category">
-                <?php foreach ($categories as $cat): ?>
-                <option value="<?=$cat['id'] ?>"><?=$cat['name']; ?></option>
+                <option value=""<?= $option_none; ?> disabled>Выберите категорию</option>
+                <?php foreach ($categories as $key => $cat): ?>
+                    <option value="<?= $cat['id']; ?>"<?php
+                    if ($cat['id'] == $value):
+                        echo " selected";
+                    endif;
+                    ?>><?= $cat['name']; ?></option>
                 <?php endforeach; ?>
             </select>
-            <span class="form__error">Выберите категорию</span>
+            <span class="form__error"><?=$errors['category']; ?></span>
         </div>
     </div>
     <?php $class_name = isset($errors['message']) ? " form__item--invalid" : "";

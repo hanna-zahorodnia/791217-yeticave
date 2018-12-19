@@ -35,6 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($required as $field) {
         if (empty($lot[$field])) {
             $errors[$field] = 'Заполните, пожалуйста, поле';
+
+            switch ($field) {
+                case 'category':
+                    $errors[$field] = "Выберите, пожалуйста, категорию";
+                    break;
+            }
+
         } else {
             $lot[$field] = $lot[$field];
         }
