@@ -30,6 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
+    if (!isset($_FILES['avatar'])) {
+        $errors['avatar'] = "Что-то пошло не так. Попробуйте еще раз";
+    }
+
     if (empty($errors)) {
         $email = mysqli_real_escape_string($con, $form['email']);
         $sql = "SELECT id FROM users WHERE email = '$email'";
@@ -41,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         else {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
 
-            if  ($_FILES['avatar']['error'] == 0) {
+            if ($_FILES['avatar']['error'] == 0) {
                 $tmp_name = htmlspecialchars($_FILES['avatar']['tmp_name']);
                 $path = htmlspecialchars($_FILES['avatar']['name']);
 
@@ -55,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $form['photo_path'] = $path;
                 }
             }
+
             if ($form['photo_path']) {
                 $sql = 'INSERT INTO users (register_date, email, name, password, photo_path, contacts)'
                     . 'VALUES (NOW(), ?, ?, ?, ?, ?); ';

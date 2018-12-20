@@ -33,4 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user']['id'])) {
 
     header("Location: lot.php?id=" . $lot['id']);
 
+} else {
+    header("Location: index.php");
 }

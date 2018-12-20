@@ -55,12 +55,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     foreach ($required_number as $number) {
-        if (!(is_numeric($_POST[$number]) && $_POST[$number] > 0)) {
+        if (!(is_numeric($lot[$number]) && $lot[$number] > 0)) {
             $errors[$number] = 'Заполните, пожалуйста, поле';
         }
     }
 
-    if  ($_FILES['lot_img']['error'] == 0) {
+    if(isset($lot['category'])) {
+        $lot_category = mysqli_real_escape_string($con, intval($lot['category']));
+        $sql = "SELECT id FROM categories WHERE id = '$lot_category'";
+        $res = mysqli_query($con, $sql);
+        if (mysqli_num_rows($res) > 0) {
+            $errors['category'] = 'Выберите, пожалуйста, корректную категорию';
+        }
+    }
+
+    if(isset($_FILES['lot_img']) && $_FILES['lot_img']['error'] == 0) {
         $tmp_name = htmlspecialchars($_FILES['lot_img']['tmp_name']);
         $path = htmlspecialchars($_FILES['lot_img']['name']);
 
@@ -78,6 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     else {
         $errors['lot_img'] = 'Вы не загрузили изображение';
+    }
+
+    if(!isset($_FILES['lot_img'])) {
+        $errors['lot_img'] = 'Что-то пошло не так с загрузкой изображения. Попробуйте еще раз';
     }
 
     if (empty($errors)) {

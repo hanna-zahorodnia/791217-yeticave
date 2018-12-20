@@ -13,8 +13,11 @@ if (empty($_SESSION['user'])) {
     $user_avatar = $_SESSION['user']['photo_path'] ? $_SESSION['user']['photo_path'] : "";
 }
 
-$lot_id = intval($_GET['id']);
-
+if(!isset($_GET['id'])) {
+    header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+} else {
+    $lot_id = intval($_GET['id']);
+}
 
 if (!isset($lot_id) || !getAvailableLot($lot_id, $con)) {
     header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
@@ -27,13 +30,15 @@ if (!isset($lot_id) || !getAvailableLot($lot_id, $con)) {
 
 
     if (!empty($_SESSION['user']['name'])) {
-        $sql = getBidUserId(intval($_GET['id']), $_SESSION['user']['id']);
-        $result = mysqli_query($con, $sql);
-        $usersIDs = mysqli_fetch_row($result);
-        if ($usersIDs) {
-            $_SESSION['user']['bid'] = 1;
-        } else {
-            $_SESSION['user']['bid'] = '';
+        if(isset($_GET['id'])) {
+            $sql = getBidUserId(intval($_GET['id']), $_SESSION['user']['id']);
+            $result = mysqli_query($con, $sql);
+            $usersIDs = mysqli_fetch_row($result);
+            if ($usersIDs) {
+                $_SESSION['user']['bid'] = 1;
+            } else {
+                $_SESSION['user']['bid'] = '';
+            }
         }
     }
 
