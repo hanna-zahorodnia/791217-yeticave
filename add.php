@@ -41,9 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $errors[$field] = "Выберите, пожалуйста, категорию";
                     break;
             }
-
-        } else {
-            $lot[$field] = $lot[$field];
         }
     }
 

@@ -25,9 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($required as $field) {
         if (empty($form[$field])) {
             $errors[$field] = 'Заполните, пожалуйста, поле ' . $field;
-        } else {
-            $form[$field] = $form[$field];
-        }
+        } 
     }
 
     if (!isset($_FILES['avatar'])) {

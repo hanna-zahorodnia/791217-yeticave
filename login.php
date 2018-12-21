@@ -25,9 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($required as $field) {
         if (empty($form[$field])) {
             $errors[$field] = 'Заполните, пожалуйста, поле';
-        } else {
-            $form['email'] = $form['email'];
-        }
+        } 
     }
 
     $email = mysqli_real_escape_string($con, $_POST['email']);
